@@ -1,0 +1,1 @@
+# detect-redirect-script
