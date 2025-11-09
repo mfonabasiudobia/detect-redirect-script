@@ -31,6 +31,28 @@ app.post("/render", async (req, res) => {
   }
 });
 
+app.post("/render3", async (req, res) => {
+  const { url } = req.body;
+  if (!url) return res.status(400).send({ error: "Missing URL" });
+
+  try {
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
+    const html = await page.content();
+    // await browser.close();
+
+    res.json({ html });
+  } catch (err) {
+    console.error("Render failed:", err);
+    res.status(500).json({ error: "Render failed", details: err.message });
+  }
+});
+
 app.post("/render2", async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).send({ error: "Missing URL" });
@@ -64,4 +86,4 @@ app.post("/render2", async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("Render service running on port 3000"));
+app.listen(4000, () => console.log("Render service running on port 3000"));

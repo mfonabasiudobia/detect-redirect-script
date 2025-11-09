@@ -56,7 +56,7 @@ async function checkOrders() {
 }
 
 // === Schedule to run every 2 minutes ===
-setInterval(checkOrders, 2 * 60 * 1000);
+setInterval(checkOrders, 5 * 60 * 1000);
 
 // Run immediately on startup
 checkOrders();
