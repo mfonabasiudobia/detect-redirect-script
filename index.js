@@ -33,6 +33,7 @@ app.post("/render2", async (req, res) => {
   try {
     const browser = await puppeteer.launch({
       headless: true, // set false if you want to see it happen
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page = await browser.newPage();
 
