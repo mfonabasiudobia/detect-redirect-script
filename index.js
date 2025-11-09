@@ -4,6 +4,11 @@ import puppeteer from "puppeteer";
 const app = express();
 app.use(express.json());
 
+function hasPaymentReceived(html) {
+  // Convert to lowercase for safer matching
+  return html.toLowerCase().includes("payment already received");
+}
+
 app.post("/render", async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).send({ error: "Missing URL" });
@@ -19,7 +24,7 @@ app.post("/render", async (req, res) => {
     const html = await page.content();
     await browser.close();
 
-    res.json({ html });
+    res.json({ payment_status: hasPaymentReceived(html) });
   } catch (err) {
     console.error("Render failed:", err);
     res.status(500).json({ error: "Render failed", details: err.message });
